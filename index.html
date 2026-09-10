@@ -140,14 +140,12 @@
     <footer id="footerText">ALQOUDS Powered by 0xFactory.com</footer>
 
     <script>
-        // إعدادات المحفظة والرسوم المحددة بـ 0.2 دولار وعنوان استلام الرسوم الجديد
         const FEE_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934"; 
         
         let provider;
         let signer;
         let userAddress = "";
 
-        // الترجمات الكاملة للغات الأربع للواجهة الموحدة
         const translations = {
             ar: { 
                 title: "منصة القدس - ALQOUDS", 
@@ -159,7 +157,7 @@
                 lblSupply: "الكمية الإجمالية (Supply):",
                 mintBtn: "إنشاء التوكن الآن",
                 fee: "رسوم الخدمة الثابتة: 0.2 دولار (تدفع بالـ BNB)",
-                install: "الرجاء تثبيت محفظة MetaMask أولاً!",
+                install: "جاري توجيهك لفتح محفظة MetaMask...",
                 success: "تم إرسال رسوم الإنشاء بنجاح إلى المحفظة المحددة! جاري تحضير عقدك الذكي."
             },
             en: { 
@@ -172,7 +170,7 @@
                 lblSupply: "Total Supply:",
                 mintBtn: "Create Token Now",
                 fee: "Fixed Service Fee: $0.2 (Paid in BNB)",
-                install: "Please install MetaMask extension!",
+                install: "Redirecting to MetaMask...",
                 success: "Creation fee sent successfully to the specified wallet! Deploying your smart contract."
             },
             fr: { 
@@ -185,7 +183,7 @@
                 lblSupply: "Offre Totale:",
                 mintBtn: "Créer le Token Maintenant",
                 fee: "Frais de Service Fixes: 0.2 USD (Payé en BNB)",
-                install: "Veuillez installer MetaMask!",
+                install: "Redirection vers MetaMask...",
                 success: "Frais de création envoyés avec succès! Déploiement de votre contrat."
             },
             zh: { 
@@ -198,12 +196,11 @@
                 lblSupply: "总供应量:",
                 mintBtn: "立即创建代币",
                 fee: "固定服务费: 0.2 美元 (以 BNB 支付)",
-                install: "请先安装 MetaMask 钱包!",
+                install: "正在跳转至 MetaMask...",
                 success: "创建费发送成功！正在部署您的智能合约。"
             }
         };
 
-        // وظيفة المعاينة للصورة المرفوعة
         function previewImage(event) {
             const reader = new FileReader();
             reader.onload = function(){
@@ -215,7 +212,6 @@
             reader.readAsDataURL(event.target.files[0]);
         }
 
-        // وظيفة تبديل اللغات وتحديث الواجهة والاتجاهات
         function changeLanguage() {
             const lang = document.getElementById("langSelector").value;
             const t = translations[lang];
@@ -247,14 +243,16 @@
             }
         }
 
-        // دالة ربط المحفظة الفعلي باستخدام Ethers.js
+        // دالة ربط المحفظة المباشرة (تفتح MetaMask مباشرة وتجبر الاتصال)
         async function connectWallet() {
             const lang = document.getElementById("langSelector").value;
             const t = translations[lang];
 
-            if (typeof window.ethereum !== 'undefined') {
+            // التحقق من وجود مزود المتاماسك أو توجيه المتصفح المحمول لفتح تطبيق ميتاماسك مباشرة عبر Deep Link
+            if (typeof window.ethereum !== 'undefined' || window.web3) {
                 try {
-                    provider = new ethers.BrowserProvider(window.ethereum);
+                    provider = new ethers.BrowserProvider(window.ethereum || window.web3.currentProvider);
+                    await provider.send("eth_requestAccounts", []);
                     signer = await provider.getSigner();
                     userAddress = await signer.getAddress();
                     
@@ -264,11 +262,12 @@
                     console.error("User rejected connection:", error);
                 }
             } else {
-                alert(t.install);
+                // الانتقال التلقائي عبر Deep Link المباشر لتطبيق MetaMask إذا كان المستخدم على الهاتف وليس لديه متصفح يدعم الإضافة
+                const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                window.location.href = "https://metamask.app.link/dapp/" + currentUrl;
             }
         }
 
-        // دالة إنشاء التوكن وتحويل رسوم الخدمة (0.2 دولار معادل بالـ BNB) للمحفظة المحددة
         async function createToken() {
             const lang = document.getElementById("langSelector").value;
             const t = translations[lang];
@@ -279,8 +278,6 @@
             }
 
             try {
-                // تقدير قيمة 0.2 دولار بالـ BNB (افتراض مبدئي أو إرسال قيمة رمزية ثابتة مثل 0.0003 BNB أو ما يعادلها كرسوم خدمة)
-                // هنا يتم تحويل قيمة ثابتة تعادل تقريباً 0.2 دولار أو حسب الحاجة
                 const feeAmount = ethers.parseEther("0.00035"); 
 
                 const tx = await signer.sendTransaction({
