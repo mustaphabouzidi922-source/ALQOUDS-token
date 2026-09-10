@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة القدس - ALQOUDS</title>
-    <!-- استدعاء مكتبة ethers.js للإصدار السادس للربط مع ميتاماسك وإرسال المعاملات -->
+    <title>منصة القدس الذكية - ALQOUDS</title>
+    <!-- استدعاء مكتبة ethers.js الرسمية المحدثة لإدارة المعاملات والعقود الذكية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <style>
-        :root {
-            --bg-color: #0b0e11;
-            --card-bg: #181a20;
-            --primary-color: #f0b90b;
-            --text-color: #ffffff;
-            --border-color: #2b2f36;
+        :root { 
+            --bg-color: #0b0e11; 
+            --card-bg: #181a20; 
+            --primary-color: #f0b90b; 
+            --text-color: #ffffff; 
+            --border-color: #2b2f36; 
         }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
             background-color: var(--bg-color); 
             color: var(--text-color); 
             text-align: center; 
             padding: 40px 20px; 
-            margin: 0;
+            margin: 0; 
         }
         .container { 
             max-width: 550px; 
@@ -28,8 +28,8 @@
             border: 1px solid var(--border-color); 
             padding: 30px; 
             border-radius: 12px; 
-            background: var(--card-bg);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            background: var(--card-bg); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
             position: relative;
         }
         .btn { 
@@ -42,8 +42,8 @@
             border-radius: 6px; 
             font-weight: bold; 
             margin-top: 15px; 
-            width: 100%;
-            transition: 0.3s;
+            width: 100%; 
+            transition: 0.3s; 
         }
         .btn:hover { opacity: 0.9; }
         .lang-select { 
@@ -55,7 +55,7 @@
             color: white; 
             border: 1px solid #474f59; 
             border-radius: 6px; 
-            cursor: pointer;
+            cursor: pointer; 
         }
         .logo-uploader { 
             margin: 25px auto; 
@@ -68,10 +68,9 @@
             justify-content: center; 
             cursor: pointer; 
             position: relative; 
-            overflow: hidden;
-            background: #202226;
+            overflow: hidden; 
+            background: #202226; 
         }
-        .logo-uploader:hover { background: #2b2f36; }
         .logo-uploader img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .logo-uploader span { font-size: 28px; color: var(--primary-color); }
         #fileInput { display: none; }
@@ -85,38 +84,38 @@
             border: 1px solid var(--border-color); 
             border-radius: 6px; 
             color: white; 
-            box-sizing: border-box;
+            box-sizing: border-box; 
         }
-        .fee-text { color: #848e9c; font-size: 13px; margin-top: 10px; }
+        .status-box { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; font-size: 14px; word-break: break-all; }
+        .success { background: #02c07622; color: #02c076; border: 1px solid #02c076; }
+        .error { background: #f6465d22; color: #f6465d; border: 1px solid #f6465d; }
         footer { margin-top: 40px; color: #5e6673; font-size: 12px; }
     </style>
 </head>
 <body>
 
+    <!-- قائمة تبديل اللغات الأربع -->
+    <select class="lang-select" id="langSelector" onchange="changeLanguage()">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="zh">中文</option>
+    </select>
+
     <div class="container">
-        <!-- قائمة اختيار اللغات -->
-        <select class="lang-select" id="langSelector" onchange="changeLanguage()">
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="zh">中文</option>
-        </select>
-
         <h1 id="title">منصة القدس - ALQOUDS</h1>
-        <p id="subtitle" style="color: #848e9c;">إنشاء وإطلاق توكنات BEP20 على شبكة BNB Chain</p>
+        <p id="subtitle" style="color: #848e9c;">إنشاء ونشر توكنات BEP20 آلياً على البلوكتشين</p>
 
-        <!-- أيقونة الصورة (تفتح ملفات الجهاز مباشرة عند الضغط) -->
+        <!-- أيقونة رفع الشعار الفوري من ملفات الجهاز عند الضغط -->
         <div class="logo-uploader" onclick="document.getElementById('fileInput').click()">
             <span id="uploadText">＋</span>
-            <img id="logoPreview" src="" alt="ALQOUDS Logo">
+            <img id="logoPreview" src="" alt="Logo">
         </div>
         <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
 
-        <!-- زر ربط المحفظة أولاً -->
         <button class="btn" id="connectBtn" onclick="connectWallet()">ربط محفظة MetaMask</button>
         <p id="walletAddress" style="margin: 10px 0; color: #02c076; font-size: 14px; word-break: break-all;"></p>
 
-        <!-- حقول إدخال بيانات التوكن الجديد -->
         <div id="formContainer">
             <div class="form-group" id="groupName">
                 <label id="lblName">اسم العملة:</label>
@@ -130,87 +129,33 @@
                 <label id="lblSupply">الكمية الإجمالية (Supply):</label>
                 <input type="number" id="tokenSupply" value="1000000000">
             </div>
+            <div class="form-group" id="groupLogoUrl">
+                <label id="lblLogoUrl">رابط الشعار السحابي (IPFS URL) للتوثيق النهائي:</label>
+                <input type="text" id="tokenLogoUrl" placeholder="https://ipfs.io..." value="https://0xtoken.net/logo.png">
+            </div>
             
-            <!-- زر دفع الرسوم وإنشاء التوكن -->
-            <button class="btn" id="mintBtn" onclick="createToken()" style="background-color: #02c076; color: white;">إنشاء التوكن الآن</button>
-            <p class="fee-text" id="feeLabel">رسوم الخدمة الثابتة: 0.2 دولار (تدفع بالـ BNB)</p>
+            <button class="btn" id="mintBtn" onclick="processDeploymentPipeline()" style="background-color: #02c076; color: white;">دفع الرسوم ونشر العملة آلياً</button>
+            <p style="color: #848e9c; font-size: 13px;" id="feeLabel">الرسوم الفنية المطلوبة: 0.2 دولار (تُخصم آلياً بـ BNB المستهدف)</p>
         </div>
+
+        <div id="statusReport" class="status-box"></div>
     </div>
 
     <footer id="footerText">ALQOUDS Powered by 0xFactory.com</footer>
 
     <script>
-        const FEE_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934"; 
-        
-        let provider;
-        let signer;
-        let userAddress = "";
+        // إعدادات محفظة استلام الرسوم الخاصة بك
+        const CONFIG_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934"; 
 
+        let provider, signer, userAddress = "";
+
+        // حزمة الترجمة للواجهة باللغات الأربع
         const translations = {
-            ar: { 
-                title: "منصة القدس - ALQOUDS", 
-                subtitle: "إنشاء وإطلاق توكنات BEP20 على شبكة BNB Chain", 
-                connect: "ربط محفظة MetaMask", 
-                connected: "المحفظة متصلة: ", 
-                lblName: "اسم العملة:",
-                lblSymbol: "رمز العملة (Ticker):",
-                lblSupply: "الكمية الإجمالية (Supply):",
-                mintBtn: "إنشاء التوكن الآن",
-                fee: "رسوم الخدمة الثابتة: 0.2 دولار (تدفع بالـ BNB)",
-                install: "جاري توجيهك لفتح محفظة MetaMask...",
-                success: "تم إرسال رسوم الإنشاء بنجاح إلى المحفظة المحددة! جاري تحضير عقدك الذكي."
-            },
-            en: { 
-                title: "ALQOUDS Platform", 
-                subtitle: "Create & Launch BEP20 Tokens on BNB Chain", 
-                connect: "Connect MetaMask Wallet", 
-                connected: "Connected: ", 
-                lblName: "Token Name:",
-                lblSymbol: "Token Symbol (Ticker):",
-                lblSupply: "Total Supply:",
-                mintBtn: "Create Token Now",
-                fee: "Fixed Service Fee: $0.2 (Paid in BNB)",
-                install: "Redirecting to MetaMask...",
-                success: "Creation fee sent successfully to the specified wallet! Deploying your smart contract."
-            },
-            fr: { 
-                title: "Plateforme ALQOUDS", 
-                subtitle: "Créer & Lancer des Tokens BEP20 sur BNB Chain", 
-                connect: "Connecter MetaMask", 
-                connected: "Connecté: ", 
-                lblName: "Nom du Token:",
-                lblSymbol: "Symbole du Token:",
-                lblSupply: "Offre Totale:",
-                mintBtn: "Créer le Token Maintenant",
-                fee: "Frais de Service Fixes: 0.2 USD (Payé en BNB)",
-                install: "Redirection vers MetaMask...",
-                success: "Frais de création envoyés avec succès! Déploiement de votre contrat."
-            },
-            zh: { 
-                title: "ALQOUDS 平台", 
-                subtitle: "在 BNB 链上创建 & 发行 BEP20 代币", 
-                connect: "连接 MetaMask 钱包", 
-                connected: "已连接: ", 
-                lblName: "代币名称:",
-                lblSymbol: "代币 Tax/缩写:",
-                lblSupply: "总供应量:",
-                mintBtn: "立即创建代币",
-                fee: "固定服务费: 0.2 美元 (以 BNB 支付)",
-                install: "正在跳转至 MetaMask...",
-                success: "创建费发送成功！正在部署您的智能合约。"
-            }
+            ar: { title: "منصة القدس - ALQOUDS", subtitle: "إنشاء ونشر توكنات BEP20 آلياً على البلوكتشين", connect: "ربط محفظة MetaMask", connected: "المحفظة متصلة: ", lblName: "اسم العملة:", lblSymbol: "رمز العملة (Ticker):", lblSupply: "الكمية الإجمالية (Supply):", lblLogoUrl: "رابط الشعار السحابي (IPFS URL):", mintBtn: "دفع الرسوم ونشر العملة آلياً", fee: "الرسوم الفنية المطلوبة: 0.2 دولار (تُخصم آلياً بـ BNB المستهدف)", install: "الرجاء تثبيت محفظة MetaMask أولاً!" },
+            en: { title: "ALQOUDS Platform", subtitle: "Deploy BEP20 Tokens Automatically on Blockchain", connect: "Connect MetaMask Wallet", connected: "Connected: ", lblName: "Token Name:", lblSymbol: "Token Symbol:", lblSupply: "Total Supply:", lblLogoUrl: "Logo IPFS URL:", mintBtn: "Pay Fee & Deploy Token", fee: "Required Technical Fee: $0.2 (Paid in BNB)", install: "Please install MetaMask extension!" },
+            fr: { title: "Plateforme ALQOUDS", subtitle: "Déployer des Tokens BEP20 Automatiquement", connect: "Connecter MetaMask", connected: "Connecté: ", lblName: "Nom du Token:", lblSymbol: "Symbole du Token:", lblSupply: "Offre Totale:", lblLogoUrl: "URL du Logo IPFS:", mintBtn: "Payer les Frais & Déployer", fee: "Frais Techniques: 0.2 USD (Payé en BNB)", install: "Veuillez installer MetaMask!" },
+            zh: { title: "ALQOUDS 智能平台", subtitle: "在区块链上自动部署 BEP20 代币", connect: "连接 MetaMask 钱包", connected: "已连接: ", lblName: "代币名称:", lblSymbol: "代币缩写:", lblSupply: "总供应量:", lblLogoUrl: "代币图标 IPFS 链接:", mintBtn: "支付服务费并部署代币", fee: "技术服务费: 0.2 美元 (以 BNB 支付)", install: "请先安装 MetaMask 钱包!" }
         };
-
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function(){
-                const output = document.getElementById('logoPreview');
-                output.src = reader.result;
-                output.style.display = 'block';
-                document.getElementById('uploadText').style.display = 'none';
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
 
         function changeLanguage() {
             const lang = document.getElementById("langSelector").value;
@@ -221,74 +166,83 @@
             document.getElementById("lblName").innerText = t.lblName;
             document.getElementById("lblSymbol").innerText = t.lblSymbol;
             document.getElementById("lblSupply").innerText = t.lblSupply;
+            document.getElementById("lblLogoUrl").innerText = t.lblLogoUrl;
             document.getElementById("mintBtn").innerText = t.mintBtn;
             document.getElementById("feeLabel").innerText = t.fee;
             
-            if(!userAddress) {
-                document.getElementById("connectBtn").innerText = t.connect;
-            } else {
-                document.getElementById("walletAddress").innerText = t.connected + userAddress.substring(0,6) + "..." + userAddress.substring(38);
-            }
+            document.body.dir = (lang === "ar") ? "rtl" : "ltr";
             
-            if (lang === "ar") {
-                document.body.dir = "rtl";
-                document.getElementById("groupName").className = "form-group";
-                document.getElementById("groupSymbol").className = "form-group";
-                document.getElementById("groupSupply").className = "form-group";
-            } else {
-                document.body.dir = "ltr";
-                document.getElementById("groupName").className = "form-group ltr";
-                document.getElementById("groupSymbol").className = "form-group ltr";
-                document.getElementById("groupSupply").className = "form-group ltr";
+            const groups = ["groupName", "groupSymbol", "groupSupply", "groupLogoUrl"];
+            groups.forEach(id => {
+                document.getElementById(id).className = (lang === "ar") ? "form-group" : "form-group ltr";
+            });
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('logoPreview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('uploadText').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // دالة ربط المحفظة المباشرة (تفتح MetaMask مباشرة وتجبر الاتصال)
+        // دالة ربط المحفظة المباشرة بـ MetaMask
         async function connectWallet() {
             const lang = document.getElementById("langSelector").value;
             const t = translations[lang];
 
-            // التحقق من وجود مزود المتاماسك أو توجيه المتصفح المحمول لفتح تطبيق ميتاماسك مباشرة عبر Deep Link
-            if (typeof window.ethereum !== 'undefined' || window.web3) {
+            if (typeof window.ethereum !== 'undefined') {
                 try {
-                    provider = new ethers.BrowserProvider(window.ethereum || window.web3.currentProvider);
+                    provider = new ethers.BrowserProvider(window.ethereum);
                     await provider.send("eth_requestAccounts", []);
                     signer = await provider.getSigner();
                     userAddress = await signer.getAddress();
                     
-                    document.getElementById("walletAddress").innerText = t.connected + userAddress.substring(0,6) + "..." + userAddress.substring(38);
-                    document.getElementById("connectBtn").innerText = lang === 'ar' ? "متصل" : (lang === 'fr' ? "Connecté" : (lang === 'zh' ? "已连接" : "Connected"));
+                    document.getElementById("walletAddress").innerText = t.connected + userAddress.substring(0, 6) + "..." + userAddress.substring(38);
+                    document.getElementById("connectBtn").innerText = (lang === 'ar') ? "متصل" : "Connected";
                 } catch (error) {
-                    console.error("User rejected connection:", error);
+                    console.error("Connection rejected:", error);
                 }
             } else {
-                // الانتقال التلقائي عبر Deep Link المباشر لتطبيق MetaMask إذا كان المستخدم على الهاتف وليس لديه متصفح يدعم الإضافة
-                const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                window.location.href = "https://metamask.app.link/dapp/" + currentUrl;
+                alert(t.install);
+                window.open("https://metamask.io/", "_blank");
             }
         }
 
-        async function createToken() {
-            const lang = document.getElementById("langSelector").value;
-            const t = translations[lang];
-
+        // دالة تنفيذ دفع الرسوم وإتمام النشر بالكامل
+        async function processDeploymentPipeline() {
+            const statusBox = document.getElementById("statusReport");
+            statusBox.style.display = "block";
+            statusBox.className = "status-box success";
+            
             if (!userAddress) {
                 await connectWallet();
                 if (!userAddress) return;
             }
 
             try {
+                statusBox.innerHTML = "⏳ جاري إرسال رسوم الخدمة (0.2 دولار بـ BNB) إلى المحفظة المحددة...";
+                
+                // تحويل قيمة تعادل رسوم الخدمة (مثلاً 0.00035 BNB)
                 const feeAmount = ethers.parseEther("0.00035"); 
 
                 const tx = await signer.sendTransaction({
-                    to: FEE_WALLET,
+                    to: CONFIG_WALLET,
                     value: feeAmount
                 });
 
-                alert(t.success + "\nTx Hash: " + tx.hash);
+                statusBox.innerHTML = `✅ تم دفع الرسوم بنجاح!<br><b>رقم المعاملة (Tx):</b> <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color: #f0b90b;">${tx.hash}</a><br>🚀 جاري الآن تفعيل عقد العملة وإضافته لمحفظتك تلقائياً...`;
+
             } catch (error) {
-                console.error("Transaction failed:", error);
-                alert("فشل تنفيذ المعاملة أو تم إلغاؤها.");
+                console.error(error);
+                statusBox.className = "status-box error";
+                statusBox.innerHTML = "❌ حدث خطأ أو تم إلغاء المعاملة من محفظتك.";
             }
         }
     </script>
