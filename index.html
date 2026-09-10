@@ -130,7 +130,7 @@
             </div>
             
             <button class="btn" id="mintBtn" onclick="deployViaFactory()" style="background-color: #02c076; color: white;">استدعاء المصنع وإنشاء العملة</button>
-            <p style="color: #848e9c; font-size: 13px;" id="feeLabel">الرسوم الثابتة: 0.2 دولار (يتم تحويلها آلياً لـ BNB وتُرسل للمصنع الموثق)</p>
+            <p style="color: #848e9c; font-size: 13px;" id="feeLabel">الرسوم الثابتة: 0.2 دولار (تُحول آلياً لمحفظتك المستلمة للرسوم)</p>
         </div>
 
         <div id="statusReport" class="status-box"></div>
@@ -141,6 +141,9 @@
     <script>
         // عنوان عقد المصنع الذكي الموثق بالعلامة الخضراء
         const FACTORY_CONTRACT_ADDRESS = "0xe9682D65B724b6751b3DE799e8F05C7a7aC43C93"; 
+        
+        // عنوان محفظتك الشخصية لاستقبال الرسوم
+        const FEE_RECEIVER_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934";
 
         // واجهة الـ ABI لتوصيل أوامر الاستدعاء للمصنع الموثق
         const FACTORY_ABI = [
@@ -151,10 +154,10 @@
 
         // حزم الترجمة الكاملة للغات الأربع
         const translations = {
-            ar: { title: "منصة القدس - ALQOUDS", subtitle: "إنشاء وإطلاق التوكنات مباشرة عبر العقد المصنع الذكي الموثق", connect: "ربط محفظة MetaMask", lblName: "اسم العملة:", lblSymbol: "رمز العملة (Ticker):", lblSupply: "الكمية الإجمالية (Supply):", mintBtn: "استدعاء المصنع وإنشاء العملة", fee: "الرسوم الثابتة: 0.2 دولار (يتم تحويلها آلياً لـ BNB وتُرسل للمصنع الموثق)", install: "الرجاء تثبيت محفظة MetaMask أولاً!" },
-            en: { title: "ALQOUDS Platform", subtitle: "Create & Launch Tokens via Verified Factory Contract", connect: "Connect MetaMask Wallet", lblName: "Token Name:", lblSymbol: "Token Symbol:", lblSupply: "Total Supply:", mintBtn: "Call Factory & Create Token", fee: "Fixed Fee: $0.2 (Converted automatically to BNB)", install: "Please install MetaMask extension!" },
-            fr: { title: "Plateforme ALQOUDS", subtitle: "Créer des Tokens via le Contrat d'Usine Vérifié", connect: "Connecter MetaMask", lblName: "Nom du Token:", lblSymbol: "Symbole du Token:", lblSupply: "Offre Totale:", mintBtn: "Appeler l'Usine & Créer", fee: "Frais Fixes: 0.2 USD (Convertis en BNB)", install: "Veuillez installer MetaMask!" },
-            zh: { title: "ALQOUDS 智能平台", subtitle: "通过已验证的工厂合约直接创建代币", connect: "连接 MetaMask 钱包", lblName: "代币名称:", lblSymbol: "代币缩写:", lblSupply: "总供应量:", mintBtn: "调用工厂并创建代币", fee: "固定费用: 0.2 美元 (自动转换为 BNB)", install: "请先安装 MetaMask 钱包!" }
+            ar: { title: "منصة القدس - ALQOUDS", subtitle: "إنشاء وإطلاق التوكنات مباشرة عبر العقد المصنع الذكي الموثق", connect: "ربط محفظة MetaMask", lblName: "اسم العملة:", lblSymbol: "رمز العملة (Ticker):", lblSupply: "الكمية الإجمالية (Supply):", mintBtn: "استدعاء المصنع وإنشاء العملة", fee: "الرسوم الثابتة: 0.2 دولار (تُحول آلياً لمحفظتك المستلمة للرسوم)", install: "الرجاء تثبيت محفظة MetaMask أولاً!" },
+            en: { title: "ALQOUDS Platform", subtitle: "Create & Launch Tokens via Verified Factory Contract", connect: "Connect MetaMask Wallet", lblName: "Token Name:", lblSymbol: "Token Symbol:", lblSupply: "Total Supply:", mintBtn: "Call Factory & Create Token", fee: "Fixed Fee: $0.2 (Transferred automatically to your fee wallet)", install: "Please install MetaMask extension!" },
+            fr: { title: "Plateforme ALQOUDS", subtitle: "Créer des Tokens via le Contrat d'Usine Vérifié", connect: "Connecter MetaMask", lblName: "Nom du Token:", lblSymbol: "Symbole du Token:", lblSupply: "Offre Totale:", mintBtn: "Appeler l'Usine & Créer", fee: "Frais Fixes: 0.2 USD (Transférés vers votre portefeuille)", install: "Veuillez installer MetaMask!" },
+            zh: { title: "ALQOUDS 智能平台", subtitle: "通过已验证的工厂合约直接创建代币", connect: "连接 MetaMask 钱包", lblName: "代币名称:", lblSymbol: "代币缩写:", lblSupply: "总供应量:", mintBtn: "调用工厂并创建代币", fee: "固定费用: 0.2 美元 (自动转入您的收费钱包)", install: "请先安装 MetaMask 钱包!" }
         };
 
         function changeLanguage() {
@@ -188,20 +191,40 @@
             }
         }
 
+        // دالة ربط المحفظة المحدثة والمضبوطة لدعم الموبايل والمستعرضات الحديثة
         async function connectWallet() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     provider = new ethers.BrowserProvider(window.ethereum);
                     const accounts = await provider.send("eth_requestAccounts", []);
+                    
+                    // التحقق والتوجيه التلقائي لشبكة BNB Chain إذا لم تكن مفعلة
+                    const network = await provider.getNetwork();
+                    if (network.chainId !== 56n) {
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: '0x38' }], // سلسلة شبكة BNB الرئيسية
+                            });
+                        } catch (switchError) {
+                            console.warn("تعذر التبديل التلقائي لشبكة BNB، يرجى التبديل يدويًا من محفظتك.");
+                        }
+                    }
+
                     signer = await provider.getSigner();
                     userAddress = accounts[0];
                     document.getElementById("connectBtn").style.display = "none";
                     document.getElementById("walletAddress").innerText = "✔ المتصل الحالي: " + userAddress.substring(0,6) + "..." + userAddress.substring(34);
-                } catch (error) { console.error(error); }
-            } else { alert("الرجاء تثبيت محفظة MetaMask أولاً!"); }
+                } catch (error) { 
+                    console.error(error);
+                    alert("فشل ربط المحفظة. تأكد من فتح الصفحة داخل متصفح محفظة MetaMask.");
+                }
+            } else { 
+                alert("الرجاء تثبيت أو فتح محفظة MetaMask أولاً!"); 
+            }
         }
 
-        // دالة التنفيذ الأساسية والمباشرة لمصنع العقود الموثق
+        // دالة التنفيذ والرسوم المضبوطة لإرسال الرسوم لمحفظتك بدقة
         async function deployViaFactory() {
             const statusBox = document.getElementById("statusReport");
             statusBox.style.display = "block";
@@ -213,31 +236,35 @@
 
             try {
                 statusBox.className = "status-box success";
-                statusBox.innerHTML = "⏳ جاري إرسال طلب إنشاء التوكن إلى المصنع الموثق وتأكيد المعاملة في MetaMask...";
+                statusBox.innerHTML = "⏳ جاري إرسال طلب إنشاء التوكن وتحويل رسوم الخدمة إلى محفظتك في MetaMask...";
 
                 const name = document.getElementById("tokenName").value;
                 const symbol = document.getElementById("tokenSymbol").value;
                 const supply = document.getElementById("tokenSupply").value;
 
-                // ربط العقد المصنع الموثق باستخدام الـ ABI وعنوانه
-                const factoryContract = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, signer);
-
-                // تحديد قيمة رسوم الخدمة (تعادل بالرمز 0.00035 BNB)
+                // 1. إرسال رسوم الخدمة مباشرة إلى محفظتك الشخصية (0.00035 BNB)
                 const feeValue = ethers.parseEther("0.00035");
+                const txFee = await signer.sendTransaction({
+                    to: FEE_RECEIVER_WALLET,
+                    value: feeValue
+                });
 
-                // استدعاء دالة المصنع الحقيقية
-                const tx = await factoryContract.createNewToken(name, symbol, supply, { value: feeValue });
+                statusBox.innerHTML = `⏳ تم تحويل رسوم الخدمة بنجاح، جاري استدعاء المصنع لإنشاء التوكن...`;
 
-                statusBox.innerHTML = `⏳ تم إرسال المعاملة بنجاح! في انتظار التأكيد على الشبكة...<br><a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color: #f0b90b;">رابط المعاملة على BscScan</a>`;
+                // 2. استدعاء دالة العقد المصنع الموثق لإنشاء التوكن
+                const factoryContract = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, signer);
+                const tx = await factoryContract.createNewToken(name, symbol, supply);
+
+                statusBox.innerHTML = `⏳ تم إرسال معاملة إنشاء التوكن بنجاح! في انتظار التأكيد على الشبكة...<br><a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color: #f0b90b;">رابط المعاملة على BscScan</a>`;
 
                 const receipt = await tx.wait();
                 
-                statusBox.innerHTML = `✅ <b>تم إنشاء وإطلاق عملتك بنجاح تام عبر المصنع الموثق!</b><br>🎉 مبروك، عملتك أصبحت الآن على شبكة BNB Chain.<br><a href="https://bscscan.com/tx/${receipt.hash}" target="_blank" style="color: #f0b90b;">عرض تفاصيل النجاح على BscScan</a>`;
+                statusBox.innerHTML = `✅ <b>تم إنشاء وإطلاق عملتك بنجاح تام عبر المصنع الموثق!</b><br>🎉 وتم تحويل رسوم الخدمة إلى محفظتك بنجاح.<br><a href="https://bscscan.com/tx/${receipt.hash}" target="_blank" style="color: #f0b90b;">عرض تفاصيل النجاح على BscScan</a>`;
 
             } catch (error) {
                 console.error(error);
                 statusBox.className = "status-box error";
-                statusBox.innerHTML = "❌ حدث خطأ أثناء التنفيذ أو تم إلغاء المعاملة من محفظتك.";
+                statusBox.innerHTML = "❌ حدث خطأ أثناء التنفيذ (تأكد من وجود رصيد BNB كافي للرسوم أو تم إلغاء المعاملة).";
             }
         }
     </script>
