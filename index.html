@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0b0918" />
+
+    <title>ALSOUDS — Create & Launch BEP20 Tokens on BNB Chain</title>
+    <meta name="description" content="ALSOUDS lets you create burnable BEP20 tokens on BNB Chain and launch them seamlessly with locked liquidity and auto-verification." />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --bg-color: #0b0918;
+        --card-bg: #131025;
+        --accent-pink: #ec4899;
+        --accent-purple: #8b5cf6;
+        --text-main: #f3f4f6;
+        --text-muted: #9ca3af;
+        --border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Geist', sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 1.5rem;
+      }
+
+      .logo-box {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-box svg {
+        width: 28px;
+        height: 28px;
+        fill: #fff;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+      }
+
+      p.subtitle {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: var(--accent-pink);
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .info-box {
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .info-row:last-child {
+        margin-bottom: 0;
+      }
+
+      .info-label {
+        color: var(--text-muted);
+      }
+
+      .info-value {
+        font-weight: 600;
+        font-family: 'Geist Mono', monospace;
+      }
+
+      .btn-deploy {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo-box">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+        </div>
+        <div>
+          <h1>ALSOUDS</h1>
+          <p class="subtitle">Deploy BEP20 Tokens & Liquidity on BNB Chain</p>
+        </div>
+      </div>
+
+      <form onsubmit="event.preventDefault(); alert('Deployment initialized! Fees (0.2 USD) routed to wallet and auto-verification queued.');">
+        <div class="row">
+          <div class="form-group">
+            <label>Token Name</label>
+            <input type="text" placeholder="e.g. Alsouds Coin" required />
+          </div>
+          <div class="form-group">
+            <label>Symbol</label>
+            <input type="text" placeholder="e.g. ALS" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Total Supply</label>
+            <input type="number" value="1000000" required />
+          </div>
+          <div class="form-group">
+            <label>Decimals</label>
+            <input type="number" value="18" required />
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-row">
+            <span class="info-label">Deployment Fee:</span>
+            <span class="info-value">0.2 USD (Auto-routed)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Fee Wallet:</span>
+            <span class="info-value">YOUR_WALLET_ADDRESS</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Verification:</span>
+            <span class="info-value" style="color: #10b981;">Auto BscScan (Green Check)</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-deploy">Deploy Token & Connect Wallet</button>
+      </form>
+
+      <div class="footer">
+        ALSOUDS Powered Platform
+      </div>
+    </div>
+
+  </body>
+</html>
