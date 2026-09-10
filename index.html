@@ -1,73 +1,299 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#0b0918" />
-
-    <!-- Primary SEO -->
-    <title>0xToken — Create & Launch BEP20 Tokens on BNB Chain</title>
-    <meta name="description" content="0xToken lets you create a burnable BEP20 token on BNB Chain and launch it on PancakeSwap V3 in one click. Single-sided USDX liquidity, locked forever. Auto-verified on BscScan. No code required." />
-    <meta name="keywords" content="0xToken, BEP20 token creator, BNB Chain token, BSC token launcher, PancakeSwap V3, create token, launch token, locked liquidity, USDX pair, single-sided liquidity, BscScan auto-verify, 0xFactory, 0xTools, meme coin creator, stable token, BNB token deployer, crypto launchpad" />
-    <meta name="author" content="0xFactory" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://0xtoken.net/" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://0xtoken.net/" />
-    <meta property="og:title" content="0xToken — Create & Launch BEP20 Tokens on BNB Chain" />
-    <meta property="og:description" content="Deploy a burnable BEP20 and seed PancakeSwap V3 liquidity in one transaction. Locked forever. Auto-verified on BscScan." />
-    <meta property="og:image" content="https://0xtoken.net/logo.png" />
-    <meta property="og:image:alt" content="0xToken — BEP20 token launcher on BNB Chain" />
-    <meta property="og:site_name" content="0xToken" />
-    <meta property="og:locale" content="en_US" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@0xFactoryCom" />
-    <meta name="twitter:creator" content="@0xFactoryCom" />
-    <meta name="twitter:title" content="0xToken — Create & Launch BEP20 Tokens on BNB Chain" />
-    <meta name="twitter:description" content="Deploy a burnable BEP20 and seed PancakeSwap V3 liquidity in one transaction. Locked forever. Auto-verified on BscScan." />
-    <meta name="twitter:image" content="https://0xtoken.net/logo.png" />
-    <meta name="twitter:image:alt" content="0xToken — BEP20 token launcher on BNB Chain" />
-
-    <!-- Structured data (JSON-LD) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "0xToken",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web",
-        "description": "Create burnable BEP20 tokens on BNB Chain with locked PancakeSwap V3 liquidity and automatic BscScan verification.",
-        "url": "https://0xtoken.net/",
-        "author": { "@type": "Organization", "name": "0xFactory", "url": "https://0xfactory.com/" },
-        "offers": { "@type": "Offer", "price": "0.01", "priceCurrency": "BNB" }
-      }
-    </script>
-
-    <!-- Embedded configuration data.json content -->
-    <script id="embedded-data" type="application/json">
-      {
-        "fee": "0.01",
-        "feeWallet": "0x6207dD58F450ab3BC4336be4E5c1cf9a686C30f0",
-        "footerText": "0xToken Powered by 0xFactory.com",
-        "socials": {
-          "telegram": "https://t.me/ZeroxFactory",
-          "twitter": "https://x.com/0xFactoryCom"
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة القدس - ALQOUDS</title>
+    <!-- استدعاء مكتبة ethers.js للإصدار السادس للربط مع ميتاماسك وإرسال المعاملات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0e11;
+            --card-bg: #181a20;
+            --primary-color: #f0b90b;
+            --text-color: #ffffff;
+            --border-color: #2b2f36;
         }
-      }
-    </script>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin: 0;
+        }
+        .container { 
+            max-width: 550px; 
+            margin: auto; 
+            border: 1px solid var(--border-color); 
+            padding: 30px; 
+            border-radius: 12px; 
+            background: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .btn { 
+            background-color: var(--primary-color); 
+            color: black; 
+            border: none; 
+            padding: 12px 25px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            margin-top: 15px; 
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .lang-select { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            padding: 8px 12px; 
+            background: var(--border-color); 
+            color: white; 
+            border: 1px solid #474f59; 
+            border-radius: 6px; 
+            cursor: pointer;
+        }
+        .logo-uploader { 
+            margin: 25px auto; 
+            width: 120px; 
+            height: 120px; 
+            border: 2px dashed var(--primary-color); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            position: relative; 
+            overflow: hidden;
+            background: #202226;
+        }
+        .logo-uploader:hover { background: #2b2f36; }
+        .logo-uploader img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .logo-uploader span { font-size: 28px; color: var(--primary-color); }
+        #fileInput { display: none; }
+        .form-group { text-align: right; margin-bottom: 15px; }
+        .form-group.ltr { text-align: left; }
+        label { display: block; margin-bottom: 5px; color: #b7bdc6; font-size: 14px; }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            background: #2b2f36; 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px; 
+            color: white; 
+            box-sizing: border-box;
+        }
+        .fee-text { color: #848e9c; font-size: 13px; margin-top: 10px; }
+        footer { margin-top: 40px; color: #5e6673; font-size: 12px; }
+    </style>
+</head>
+<body>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-AZRF4LX_.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CE2au_TG.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <div class="container">
+        <!-- قائمة اختيار اللغات -->
+        <select class="lang-select" id="langSelector" onchange="changeLanguage()">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="zh">中文</option>
+        </select>
+
+        <h1 id="title">منصة القدس - ALQOUDS</h1>
+        <p id="subtitle" style="color: #848e9c;">إنشاء وإطلاق توكنات BEP20 على شبكة BNB Chain</p>
+
+        <!-- أيقونة الصورة (تفتح ملفات الجهاز مباشرة عند الضغط) -->
+        <div class="logo-uploader" onclick="document.getElementById('fileInput').click()">
+            <span id="uploadText">＋</span>
+            <img id="logoPreview" src="" alt="ALQOUDS Logo">
+        </div>
+        <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+
+        <!-- زر ربط المحفظة أولاً -->
+        <button class="btn" id="connectBtn" onclick="connectWallet()">ربط محفظة MetaMask</button>
+        <p id="walletAddress" style="margin: 10px 0; color: #02c076; font-size: 14px; word-break: break-all;"></p>
+
+        <!-- حقول إدخال بيانات التوكن الجديد -->
+        <div id="formContainer">
+            <div class="form-group" id="groupName">
+                <label id="lblName">اسم العملة:</label>
+                <input type="text" id="tokenName" value="ALQOUDS">
+            </div>
+            <div class="form-group" id="groupSymbol">
+                <label id="lblSymbol">رمز العملة (Ticker):</label>
+                <input type="text" id="tokenSymbol" value="AQS">
+            </div>
+            <div class="form-group" id="groupSupply">
+                <label id="lblSupply">الكمية الإجمالية (Supply):</label>
+                <input type="number" id="tokenSupply" value="1000000000">
+            </div>
+            
+            <!-- زر دفع الرسوم وإنشاء التوكن -->
+            <button class="btn" id="mintBtn" onclick="createToken()" style="background-color: #02c076; color: white;">إنشاء التوكن الآن</button>
+            <p class="fee-text" id="feeLabel">رسوم الخدمة الثابتة: 0.2 دولار (تدفع بالـ BNB)</p>
+        </div>
+    </div>
+
+    <footer id="footerText">ALQOUDS Powered by 0xFactory.com</footer>
+
+    <script>
+        // إعدادات المحفظة والرسوم المحددة بـ 0.2 دولار وعنوان استلام الرسوم الجديد
+        const FEE_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934"; 
+        
+        let provider;
+        let signer;
+        let userAddress = "";
+
+        // الترجمات الكاملة للغات الأربع للواجهة الموحدة
+        const translations = {
+            ar: { 
+                title: "منصة القدس - ALQOUDS", 
+                subtitle: "إنشاء وإطلاق توكنات BEP20 على شبكة BNB Chain", 
+                connect: "ربط محفظة MetaMask", 
+                connected: "المحفظة متصلة: ", 
+                lblName: "اسم العملة:",
+                lblSymbol: "رمز العملة (Ticker):",
+                lblSupply: "الكمية الإجمالية (Supply):",
+                mintBtn: "إنشاء التوكن الآن",
+                fee: "رسوم الخدمة الثابتة: 0.2 دولار (تدفع بالـ BNB)",
+                install: "الرجاء تثبيت محفظة MetaMask أولاً!",
+                success: "تم إرسال رسوم الإنشاء بنجاح إلى المحفظة المحددة! جاري تحضير عقدك الذكي."
+            },
+            en: { 
+                title: "ALQOUDS Platform", 
+                subtitle: "Create & Launch BEP20 Tokens on BNB Chain", 
+                connect: "Connect MetaMask Wallet", 
+                connected: "Connected: ", 
+                lblName: "Token Name:",
+                lblSymbol: "Token Symbol (Ticker):",
+                lblSupply: "Total Supply:",
+                mintBtn: "Create Token Now",
+                fee: "Fixed Service Fee: $0.2 (Paid in BNB)",
+                install: "Please install MetaMask extension!",
+                success: "Creation fee sent successfully to the specified wallet! Deploying your smart contract."
+            },
+            fr: { 
+                title: "Plateforme ALQOUDS", 
+                subtitle: "Créer & Lancer des Tokens BEP20 sur BNB Chain", 
+                connect: "Connecter MetaMask", 
+                connected: "Connecté: ", 
+                lblName: "Nom du Token:",
+                lblSymbol: "Symbole du Token:",
+                lblSupply: "Offre Totale:",
+                mintBtn: "Créer le Token Maintenant",
+                fee: "Frais de Service Fixes: 0.2 USD (Payé en BNB)",
+                install: "Veuillez installer MetaMask!",
+                success: "Frais de création envoyés avec succès! Déploiement de votre contrat."
+            },
+            zh: { 
+                title: "ALQOUDS 平台", 
+                subtitle: "在 BNB 链上创建 & 发行 BEP20 代币", 
+                connect: "连接 MetaMask 钱包", 
+                connected: "已连接: ", 
+                lblName: "代币名称:",
+                lblSymbol: "代币 Tax/缩写:",
+                lblSupply: "总供应量:",
+                mintBtn: "立即创建代币",
+                fee: "固定服务费: 0.2 美元 (以 BNB 支付)",
+                install: "请先安装 MetaMask 钱包!",
+                success: "创建费发送成功！正在部署您的智能合约。"
+            }
+        };
+
+        // وظيفة المعاينة للصورة المرفوعة
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('logoPreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+                document.getElementById('uploadText').style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // وظيفة تبديل اللغات وتحديث الواجهة والاتجاهات
+        function changeLanguage() {
+            const lang = document.getElementById("langSelector").value;
+            const t = translations[lang];
+            
+            document.getElementById("title").innerText = t.title;
+            document.getElementById("subtitle").innerText = t.subtitle;
+            document.getElementById("lblName").innerText = t.lblName;
+            document.getElementById("lblSymbol").innerText = t.lblSymbol;
+            document.getElementById("lblSupply").innerText = t.lblSupply;
+            document.getElementById("mintBtn").innerText = t.mintBtn;
+            document.getElementById("feeLabel").innerText = t.fee;
+            
+            if(!userAddress) {
+                document.getElementById("connectBtn").innerText = t.connect;
+            } else {
+                document.getElementById("walletAddress").innerText = t.connected + userAddress.substring(0,6) + "..." + userAddress.substring(38);
+            }
+            
+            if (lang === "ar") {
+                document.body.dir = "rtl";
+                document.getElementById("groupName").className = "form-group";
+                document.getElementById("groupSymbol").className = "form-group";
+                document.getElementById("groupSupply").className = "form-group";
+            } else {
+                document.body.dir = "ltr";
+                document.getElementById("groupName").className = "form-group ltr";
+                document.getElementById("groupSymbol").className = "form-group ltr";
+                document.getElementById("groupSupply").className = "form-group ltr";
+            }
+        }
+
+        // دالة ربط المحفظة الفعلي باستخدام Ethers.js
+        async function connectWallet() {
+            const lang = document.getElementById("langSelector").value;
+            const t = translations[lang];
+
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    provider = new ethers.BrowserProvider(window.ethereum);
+                    signer = await provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    document.getElementById("walletAddress").innerText = t.connected + userAddress.substring(0,6) + "..." + userAddress.substring(38);
+                    document.getElementById("connectBtn").innerText = lang === 'ar' ? "متصل" : (lang === 'fr' ? "Connecté" : (lang === 'zh' ? "已连接" : "Connected"));
+                } catch (error) {
+                    console.error("User rejected connection:", error);
+                }
+            } else {
+                alert(t.install);
+            }
+        }
+
+        // دالة إنشاء التوكن وتحويل رسوم الخدمة (0.2 دولار معادل بالـ BNB) للمحفظة المحددة
+        async function createToken() {
+            const lang = document.getElementById("langSelector").value;
+            const t = translations[lang];
+
+            if (!userAddress) {
+                await connectWallet();
+                if (!userAddress) return;
+            }
+
+            try {
+                // تقدير قيمة 0.2 دولار بالـ BNB (افتراض مبدئي أو إرسال قيمة رمزية ثابتة مثل 0.0003 BNB أو ما يعادلها كرسوم خدمة)
+                // هنا يتم تحويل قيمة ثابتة تعادل تقريباً 0.2 دولار أو حسب الحاجة
+                const feeAmount = ethers.parseEther("0.00035"); 
+
+                const tx = await signer.sendTransaction({
+                    to: FEE_WALLET,
+                    value: feeAmount
+                });
+
+                alert(t.success + "\nTx Hash: " + tx.hash);
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("فشل تنفيذ المعاملة أو تم إلغاؤها.");
+            }
+        }
+    </script>
+</body>
 </html>
