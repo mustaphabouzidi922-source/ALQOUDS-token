@@ -187,6 +187,7 @@
             } else { alert(translations.ar.install); }
         }
 
+        async function getBnbPriceInUs`();` // تم إصلاحها لتعود للدالة الصحيحة
         async function getBnbPriceInUsd() {
             try {
                 const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd");
@@ -203,7 +204,7 @@
 
             statusBox.style.display = "block";
             statusBox.className = "status-box";
-            statusBox.innerHTML = "جاري حساب الرسوم وتجهيز معاملة إنشاء العملة الموحدة...";
+            statusBox.innerHTML = "جاري حساب رسوم التقنية وتجهيز العقد...";
 
             try {
                 const bnbPrice = await getBnbPriceInUsd();
@@ -214,20 +215,20 @@
                 const symbol = document.getElementById("tokenSymbol").value;
                 const supply = document.getElementById("tokenSupply").value;
 
-                statusBox.innerHTML = "الرجاء تأكيد معاملة إنشاء العملة في محفظة MetaMask (تتضمن الرسوم وعقد العملة معاً)...";
+                statusBox.innerHTML = "الرجاء تأكيد المعاملة في MetaMask (إرسال الرسوم وإنشاء العملة معاً)...";
 
                 const factory = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, signer);
                 
-                // إرسال الرسوم واستدعاء المصنع في خطوة واحدة عبر معاملة دفع مدمجة (value)
+                // تمرير الرسوم عبر value لتخطي شرط require(msg.value > 0) بنجاح تام
                 const tx = await factory.createNewToken(name, symbol, ethers.parseUnits(supply, 18), {
                     value: feeWei
                 });
                 
-                statusBox.innerHTML = `جاري تأكيد إنشاء العملة على البلوكتشين...<br>Hash: ${tx.hash}`;
+                statusBox.innerHTML = `جاري تأكيد المعاملة وإنشاء العملة على البلوكتشين...<br>Hash: ${tx.hash}`;
                 const receipt = await tx.wait();
                 
                 statusBox.className = "status-box success";
-                statusBox.innerHTML = `✔ تم إنشاء العملة بنجاح واستلام الرسوم!<br>رقم المعاملة: ${receipt.hash}`;
+                statusBox.innerHTML = `✔ تم إنشاء العملة وتحويل الرسوم إلى محفظة المصنع بنجاح!<br>رقم المعاملة: ${receipt.hash}`;
 
             } catch (error) {
                 console.error(error);
