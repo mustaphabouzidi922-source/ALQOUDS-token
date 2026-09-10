@@ -130,10 +130,8 @@
 
     <script>
         const FACTORY_CONTRACT_ADDRESS = "0x9d448f1bccbfdfb960ba460d35a8690a4927c0ca"; 
-        const OWNER_FEE_WALLET = "0x4C1356e1C34C0fCcF7f291364c04D435eE8D9934"; // محفظتك لاستلام الرسوم
         const SERVICE_FEE_USD = 0.2; 
 
-        // تم تحديث الـ ABI ليدعم تحويل الرسوم واستدعاء المصنع في معاملة واحدة موحدة
         const FACTORY_ABI = [
             "function createNewToken(string memory _name, string memory _symbol, uint256 _supply) public payable returns (address)"
         ];
@@ -205,35 +203,31 @@
 
             statusBox.style.display = "block";
             statusBox.className = "status-box";
-            statusBox.innerHTML = "جاري حساب رسوم الخدمة وتجهيز المعاملة الموحدة...";
+            statusBox.innerHTML = "جاري حساب الرسوم وتجهيز معاملة إنشاء العملة الموحدة...";
 
             try {
                 const bnbPrice = await getBnbPriceInUsd();
                 const feeInBnb = SERVICE_FEE_USD / bnbPrice;
                 const feeWei = ethers.parseEther(feeInBnb.toFixed(6));
 
-                const factory = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, signer);
-                
                 const name = document.getElementById("tokenName").value;
                 const symbol = document.getElementById("tokenSymbol").value;
                 const supply = document.getElementById("tokenSupply").value;
 
-                statusBox.innerHTML = "الرجاء تأكيد المعاملة الموحدة في محفظة MetaMask...";
+                statusBox.innerHTML = "الرجاء تأكيد معاملة إنشاء العملة في محفظة MetaMask (تتضمن الرسوم وعقد العملة معاً)...";
 
-                // تحويل الرسوم مباشرة لمحفظتك الشخصية (OWNER_FEE_WALLET) في نفس السياق البرمجي الآمن
-                const txFee = await signer.sendTransaction({
-                    to: OWNER_FEE_WALLET,
+                const factory = new ethers.Contract(FACTORY_CONTRACT_ADDRESS, FACTORY_ABI, signer);
+                
+                // إرسال الرسوم واستدعاء المصنع في خطوة واحدة عبر معاملة دفع مدمجة (value)
+                const tx = await factory.createNewToken(name, symbol, ethers.parseUnits(supply, 18), {
                     value: feeWei
                 });
-                await txFee.wait();
-
-                // استدعاء المصنع لإنشاء العملة
-                const tx = await factory.createNewToken(name, symbol, ethers.parseUnits(supply, 18));
-                statusBox.innerHTML = `جاري تأكيد إنشاء العملة وتوثيقها على البلوكتشين...<br>Hash: ${tx.hash}`;
                 
+                statusBox.innerHTML = `جاري تأكيد إنشاء العملة على البلوكتشين...<br>Hash: ${tx.hash}`;
                 const receipt = await tx.wait();
+                
                 statusBox.className = "status-box success";
-                statusBox.innerHTML = `✔ تم إنشاء العملة وإرسال الرسوم بنجاح!<br>رقم المعاملة: ${receipt.hash}`;
+                statusBox.innerHTML = `✔ تم إنشاء العملة بنجاح واستلام الرسوم!<br>رقم المعاملة: ${receipt.hash}`;
 
             } catch (error) {
                 console.error(error);
