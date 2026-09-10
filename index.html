@@ -1,231 +1,73 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#0b0918" />
 
-    <title>ALSOUDS — Create & Launch BEP20 Tokens on BNB Chain</title>
-    <meta name="description" content="ALSOUDS lets you create burnable BEP20 tokens on BNB Chain and launch them seamlessly with locked liquidity and auto-verification." />
-    
+    <!-- Primary SEO -->
+    <title>0xToken — Create & Launch BEP20 Tokens on BNB Chain</title>
+    <meta name="description" content="0xToken lets you create a burnable BEP20 token on BNB Chain and launch it on PancakeSwap V3 in one click. Single-sided USDX liquidity, locked forever. Auto-verified on BscScan. No code required." />
+    <meta name="keywords" content="0xToken, BEP20 token creator, BNB Chain token, BSC token launcher, PancakeSwap V3, create token, launch token, locked liquidity, USDX pair, single-sided liquidity, BscScan auto-verify, 0xFactory, 0xTools, meme coin creator, stable token, BNB token deployer, crypto launchpad" />
+    <meta name="author" content="0xFactory" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://0xtoken.net/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://0xtoken.net/" />
+    <meta property="og:title" content="0xToken — Create & Launch BEP20 Tokens on BNB Chain" />
+    <meta property="og:description" content="Deploy a burnable BEP20 and seed PancakeSwap V3 liquidity in one transaction. Locked forever. Auto-verified on BscScan." />
+    <meta property="og:image" content="https://0xtoken.net/logo.png" />
+    <meta property="og:image:alt" content="0xToken — BEP20 token launcher on BNB Chain" />
+    <meta property="og:site_name" content="0xToken" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@0xFactoryCom" />
+    <meta name="twitter:creator" content="@0xFactoryCom" />
+    <meta name="twitter:title" content="0xToken — Create & Launch BEP20 Tokens on BNB Chain" />
+    <meta name="twitter:description" content="Deploy a burnable BEP20 and seed PancakeSwap V3 liquidity in one transaction. Locked forever. Auto-verified on BscScan." />
+    <meta name="twitter:image" content="https://0xtoken.net/logo.png" />
+    <meta name="twitter:image:alt" content="0xToken — BEP20 token launcher on BNB Chain" />
+
+    <!-- Structured data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "0xToken",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "description": "Create burnable BEP20 tokens on BNB Chain with locked PancakeSwap V3 liquidity and automatic BscScan verification.",
+        "url": "https://0xtoken.net/",
+        "author": { "@type": "Organization", "name": "0xFactory", "url": "https://0xfactory.com/" },
+        "offers": { "@type": "Offer", "price": "0.01", "priceCurrency": "BNB" }
+      }
+    </script>
+
+    <!-- Embedded configuration data.json content -->
+    <script id="embedded-data" type="application/json">
+      {
+        "fee": "0.01",
+        "feeWallet": "0x6207dD58F450ab3BC4336be4E5c1cf9a686C30f0",
+        "footerText": "0xToken Powered by 0xFactory.com",
+        "socials": {
+          "telegram": "https://t.me/ZeroxFactory",
+          "twitter": "https://x.com/0xFactoryCom"
+        }
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <style>
-      :root {
-        --bg-color: #0b0918;
-        --card-bg: #131025;
-        --accent-pink: #ec4899;
-        --accent-purple: #8b5cf6;
-        --text-main: #f3f4f6;
-        --text-muted: #9ca3af;
-        --border-color: rgba(255, 255, 255, 0.1);
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Geist', sans-serif;
-      }
-
-      body {
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem 1rem;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 600px;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 2.5rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      }
-
-      .header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 1.5rem;
-      }
-
-      .logo-box {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .logo-box svg {
-        width: 28px;
-        height: 28px;
-        fill: #fff;
-      }
-
-      h1 {
-        font-size: 1.75rem;
-        font-weight: 600;
-      }
-
-      p.subtitle {
-        color: var(--text-muted);
-        font-size: 0.9rem;
-        margin-top: 0.25rem;
-      }
-
-      .form-group {
-        margin-bottom: 1.25rem;
-      }
-
-      label {
-        display: block;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-      }
-
-      input {
-        width: 100%;
-        padding: 0.85rem 1rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        color: #fff;
-        font-size: 1rem;
-        outline: none;
-      }
-
-      input:focus {
-        border-color: var(--accent-pink);
-      }
-
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-      }
-
-      .info-box {
-        background: rgba(139, 92, 246, 0.1);
-        border: 1px solid rgba(139, 92, 246, 0.3);
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1.5rem 0;
-        font-size: 0.9rem;
-      }
-
-      .info-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-      }
-
-      .info-row:last-child {
-        margin-bottom: 0;
-      }
-
-      .info-label {
-        color: var(--text-muted);
-      }
-
-      .info-value {
-        font-weight: 600;
-        font-family: 'Geist Mono', monospace;
-      }
-
-      .btn-deploy {
-        width: 100%;
-        padding: 1rem;
-        background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      .footer {
-        text-align: center;
-        margin-top: 2rem;
-        font-size: 0.85rem;
-        color: var(--text-muted);
-      }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-AZRF4LX_.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CE2au_TG.css">
   </head>
   <body>
-
-    <div class="container">
-      <div class="header">
-        <div class="logo-box">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
-        </div>
-        <div>
-          <h1>ALSOUDS</h1>
-          <p class="subtitle">Deploy BEP20 Tokens & Liquidity on BNB Chain</p>
-        </div>
-      </div>
-
-      <form onsubmit="event.preventDefault(); alert('Deployment initialized! Fees (0.2 USD) routed to wallet and auto-verification queued.');">
-        <div class="row">
-          <div class="form-group">
-            <label>Token Name</label>
-            <input type="text" placeholder="e.g. Alsouds Coin" required />
-          </div>
-          <div class="form-group">
-            <label>Symbol</label>
-            <input type="text" placeholder="e.g. ALS" required />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <label>Total Supply</label>
-            <input type="number" value="1000000" required />
-          </div>
-          <div class="form-group">
-            <label>Decimals</label>
-            <input type="number" value="18" required />
-          </div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-row">
-            <span class="info-label">Deployment Fee:</span>
-            <span class="info-value">0.2 USD (Auto-routed)</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Fee Wallet:</span>
-            <span class="info-value">YOUR_WALLET_ADDRESS</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Verification:</span>
-            <span class="info-value" style="color: #10b981;">Auto BscScan (Green Check)</span>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-deploy">Deploy Token & Connect Wallet</button>
-      </form>
-
-      <div class="footer">
-        ALSOUDS Powered Platform
-      </div>
-    </div>
-
+    <div id="root"></div>
   </body>
 </html>
